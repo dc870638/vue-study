@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="./bootstrap.css" />
+    <script src="./vue.js"></script>
+    <script src="./vue-router.js"></script>
+</head>
+<body>
+    <div id="app">
+        <router-link to='/account'>Account</router-link>
+        <router-view></router-view>
+    </div>
+
+
+    <!-- 组件的模版对象 -->
+    <template id="temp1">
+        <div>
+            <h1>这是Account组件</h1>
+            <router-link to='/account/login'>登陆</router-link>
+            <router-link to='/account/register'>注册</router-link>
+            <router-view></router-view>
+        </div>
+    </template>
+
+
+    <script>
+        var account = {
+            template:'#temp1'
+        }
+
+        var login = {
+            template:'<h3>登陆</h3>'
+        }
+
+        var register = {
+            template:'<h3>注册</h3>'
+        }
+        
+
+        var router = new VueRouter({
+            routes:[
+                {   path:'/account',
+                    component: account,
+                    // 使用children属性实现子路由，不要在路径前加/
+                    children:[
+                        { path:'login', component:login},
+                        { path: 'register', component:register}
+                    ]
+                }
+                // { path:'/account/login',component: login},
+                // { path:'/account/register',component: register}
+
+            ]
+        })
+
+        var vm = new Vue({
+            el:'#app',
+            data:{
+
+            },
+            methods:{
+
+            },
+            router:router
+        })
+    </script>
+</body>
+</html>

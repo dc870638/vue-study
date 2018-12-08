@@ -3,11 +3,41 @@
 <head>
 	<title></title>
 	<script src="./vue.js"></script>
-	<script src="./vue-router.js"></script>
+    <script src="./vue-router.js"></script>
+    <style>
+        .router-link-active,.myactive{
+            color: brown;
+            font-weight: 800;
+            font-style: italic;
+            font-size: 80px;
+            text-decoration: underline;
+            background-color: green;
+        }
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;
+            transform: translateX(140px);
+        }
+
+        .v-enter-active,
+        .v-leave-active{
+            transition: all .5s ease;
+        }
+    </style>
 </head>
 <body>
 	<div id="app">
-		
+
+        <!-- <a href="#/login">登陆</a>
+        <a href="#/register">注册</a> -->
+        <router-link to='/login?id=10&name=chao' tag='span'>登陆</router-link>
+        <router-link to='/register'>注册</router-link>
+
+
+        <!--  这是vue-router提供的元素，当作占位符，将来路由的规则，匹配到的组件，就会展示到这个router-view中去 -->
+		<transition mode='out-in'>
+            <router-view></router-view> 
+        </transition>
 	</div>
 
 
@@ -15,19 +45,31 @@
 
 	<script>
         var login = {
-            template:'<h3>登陆组件</h3>'
+            template:'<h1>登陆组件{{ msg }}:{{ this.$route.query.id }}---{{ this.$route.query.name }}</h1>',
+            created(){
+                console.log(this.$route.query.id)
+            },
+            data(){
+                return{
+                    msg:'lalala'
+                }
+                
+            }
         }
 
         var register = {
-            template:'<h3>注册组件</h3>' 
+            template:'<h1>注册组件</h1>' 
         }
 
         var routerObj =  new VueRouter({
             // 这个对象中的route 表示匹配路由规则
             routes :[
-                { path: './login',component:'login'},
-                { path: './register',component:'register'},
-            ]
+                // { path: '/',component: login},
+                { path :'/', redirect:'/login'},
+                { path: '/login',component:login},
+                { path: '/register',component:register}
+            ],
+            linkActiveClass:'myactive'
         })
 
 
