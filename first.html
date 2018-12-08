@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div id="app">
+		<div v-html='msg'></div>
+		<input type="button" value="按钮" :title="mytitle" @click='click'>
+	</div>
+
+
+
+<script src="./vue.js"></script>
+<script>
+	new Vue({
+		el:'#app',
+		data:{
+			msg:'<h1>哈哈哈</h1>',
+			mytitle:'这是一个自定义的按钮'
+		},
+		methods:{
+			click:function(){
+				alert('hahaha')
+			}
+		}
+	})
+</script>
+</body>
+</html>

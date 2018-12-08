@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="./vue.js"></script>
+	<link rel="stylesheet" type="text/css" href="./bootstrap.css">
+</head>
+<body>
+	<div id="app">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">添加品牌</h3>
+			</div>
+			<div class="panel-body form-inline"> 
+				<label>
+					Id:
+					<input type="text" class="form-control" v-model='id'>
+				</label>
+				<label>
+					Name:
+					<input type="text" class="form-control" v-model='name' @keyup.enter='add'>
+				</label>
+				
+				<input type="button" value="添加" class="btn btn-primary" @click='add'>
+
+				<label>
+					搜索关键字
+					<input type="text" class="form-control" v-model='keywords' id="search" v-focus v-color="'blue'">
+				</label>
+
+			</div>
+		</div>
+
+
+		<table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Ctime</th>
+					<th>Operation</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- 之前 v-for 中的数据，都是直接从data上的list中直接渲染过来的 -->
+				<!-- 现在，我们自定义了一个search方法，同时，把搜索的关键字，通过传参形式，传递给了search方法 -->
+				<!-- 在search方法内部通过执行for循环，把所有符合搜索关键字的数据，保存到一个新的数组中 -->
+				<tr v-for='item in search(keywords)' :key='item.id'>
+					<td>{{ item.id }}</td>
+					<td v-text='item.name'></td>
+					<td>{{ item.ctime|dateFormat }}</td>
+					<td>
+						<a href="" @click.prevent='del(item.id)'>删除</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+	
+
+
+	<script>
+		Vue.filter('dateFormat',function(datestr){
+			var dt = new Date(datestr)
+			var y = dt.getFullYear()
+			var m = dt.getMonth() + 1
+			var d = dt.getDate()
+
+			return `${y}-${m}-${d}`
+		})
+
+		//定义全局的指令
+		//参数1是指令的名称，注意在定义的时候不需要在指令前面加v-前缀
+		//在调用的时候必须加v-前缀
+		//参数2是一个对象，这个对象身上，有一些指令相关的函数
+		Vue.directive('focus',{
+			//在每个函数中，第一个参数永远是el，表示被绑定了指令的那个元素，这个el参数，是一个原生的js对象
+			//在元素刚绑定指令的时候，还没有插入到DOM中去，这时候调用focus方法没有作用
+			bind:function(el){
+				// el.focus()
+			},//每当指令绑定到元素上的时候，会立即执行bind函数，只执行一次
+			inserted:function(el){
+				el.focus()
+			},//inserted表示元素插入到DOM中的时候，会执行inserted函数
+			updated:function(){}
+		})
+
+		Vue.directive('color',{
+			//样式只要绑定给了元素，不管这个元素有没有插入到页面中去，这个元素肯定有了一个内联样式，将来元素肯定会显示到页面中去，这时候，浏览器渲染引擎必然会解析样式，应用给这个元素
+			bind:function(el,binding){
+				el.style.color=binding.value
+			}
+		})
+
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				id:'',
+				name:'',
+				keywords:'',//搜索关键字
+				list:[
+					{id:1,name:'奔驰',ctime:new Date()},
+					{id:2,name:'宝马',ctime:new Date()}
+				]
+			},
+			methods:{
+				add(){
+					console.log('ok')
+					var car = {id:this.id,name:this.name,ctime:new Date()}
+					this.list.push(car)
+					this.id=''
+					this.name=''
+				},
+				del(id){
+					// //分析
+					// //1.如何根据Id，找到要删除的这一项的索引
+					// //2.如果找到了索引，直接调用数组的splice方法
+					// this.list.some((item,i) =>{
+					// 	if(item.id==id){
+					// 		this.list.splice(i,1)
+					// 		//在数组的some方法中，如果return true，就会立刻终止这个数组的后续循环
+					// 		return true;
+					// 	}
+					// })
+
+					var index = this.list.findIndex(item=>{
+						if(item.id==id){
+							return true;
+						}
+					})
+					// console.log(index)
+					this.list.splice(index,1)
+				},
+				search(keywords){ //关键字搜索
+					var newList=[]
+					this.list.forEach(item =>{
+						if(item.name.indexOf(keywords)!=-1){
+							newList.push(item)
+						}
+					})
+					return newList
+				}
+			}
+		})
+
+
+		// Vue.filter('过滤器的名称',function(data){
+		// 	return data +  '123'
+		// })
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

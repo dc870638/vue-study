@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="./vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<com2 @func='show'>
+			
+		</com2>
+	</div>
+
+	<template id="temp1">
+		<div>
+			<h1>这是子组件</h1>
+			<input type="button" value="这是子组件上的按钮-点击它触发父组件出传递过来的func方法" @click='myclick'>
+		</div>
+	</template>
+
+	<script>
+		var com2 = {
+			template:'#temp1',
+			//组件中的data要是函数
+			data(){
+				return{
+					sonmsg:{ name:'小头儿子', age:6}
+				}
+			},
+			methods:{
+				myclick(){
+					//当点击子组件的按钮时，如何拿到父组件传来的func,并调用这个方法呢？
+					this.$emit('func',this.sonmsg)
+				}
+			}
+		}
+
+
+
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				datamsgFronSon:null
+			},
+			methods:{
+				//show后面传参，在子组件后面也可以加参数，变相子组件向父组件传递数据了
+				show(data){
+					console.log('调用了父组件上的方法:' + data)
+					this.datamsgFronSon = data
+				}
+			},
+			components:{
+				com2
+			}
+		})
+	</script>
+</body>
+</html>

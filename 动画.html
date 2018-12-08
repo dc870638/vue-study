@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="./vue.js"></script>
+	<style>
+		.v-enter,
+		.v-leave-to{
+			opacity: 0;
+		}
+
+		.v-enter-active,
+		.v-leave-active{
+			transition: all 0.4s ease;
+			transform: translateX(150px);
+		}
+
+		.my-enter,
+		.my-leave-to{
+			opacity: 0;
+		}
+
+		.my-enter-active,
+		.my-leave-active{
+			transition: all 0.4s ease;
+			transform: translateY(150px);
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<input type="button" name="" value="toggle" @click='flag=!flag'>
+
+		<transition>
+			<h3 v-if='flag'>这是一个标题</h3>
+		</transition>
+		<hr>
+		<input type="button" name="" value="toggle" @click='flag1=!flag1'>
+		<transition name='my'>
+			<h3 v-if='flag1'>这是一个标题</h3>
+		</transition>
+	</div>
+
+
+
+	<script>
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				flag:false,
+				flag1:false
+			}
+		})
+	</script>
+</body>
+</html>

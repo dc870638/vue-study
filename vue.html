@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>组件</title>
+</head>
+<body>
+
+	<div id="vue">
+		{{ tags }}
+	</div>
+
+
+	<div id='app'>
+		<button-counter></button-counter>
+		<button-counter></button-counter>
+		<button-counter></button-counter>
+	</div>
+
+	<div id='blog-post-demo' >
+		<blog-post
+		v-for='post in posts'
+		:key='post.id'
+		:title='post.title'
+		>
+			
+		</blog-post>
+	</div>
+
+
+
+<script src="./vue.js"></script>
+<script src="./vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
+<script>
+	Vue.component('button-counter',{
+		data:function(){
+			return{
+				counter:0
+			}
+		},
+		template:'<button @click = counter++>You click me {{counter}} times</button>'
+		})
+
+	Vue.component('blog-post',{
+		props:['title'],
+		template:`<div class='blog-post'>
+					<h3>{{ title }}</h3>
+					<button>
+						Enlarge Text
+					</button>
+				  </div>`
+	})
+
+	
+
+	new Vue({
+		el:'#app'
+	})
+
+
+	new Vue({
+		el:'#blog-post-demo',
+		data:{
+			posts:[
+				{ id: 1, title: 'My journey with Vue' },
+      			{ id: 2, title: 'Blogging with Vue' },
+      			{ id: 3, title: 'Why Vue is so fun' }
+			]
+		}
+	})
+
+	var vm = new Vue({
+		el:'#vue',
+		data:{
+			tags:'这是第一个vue实例'
+		},
+		
+	})
+
+
+
+	
+
+	
+</script>
+</body>
+</html>
